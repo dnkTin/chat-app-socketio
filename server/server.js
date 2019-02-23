@@ -15,14 +15,22 @@ app.use(express.static(publicPath));
 
 io.on('connection', (socket) => {
 
-    socket.emit('newMessage', {
-        from: 'Khanh Tin',
-        text: 'Hey, what is going on',
-        createAt: 123
-    });
+    // socket.emit('newMessage', { ====> cause we have io.emit() every createMessage event
+    //     from: 'Khanh Tin',
+    //     text: 'Hey, what is going on',
+    //     createAt: 123
+    // });
+
+
     // listener from server when event occur from client
     socket.on('createMessage', (newMessage) => {
         console.log('create message', newMessage);
+        // emit an event to every single connection
+        io.emit('newMessage', {
+            from: newMessage.from,
+            text: newMessage.text,
+            createdAt: new Date().getTime()
+        })
     })
 
     console.log('New user connected');

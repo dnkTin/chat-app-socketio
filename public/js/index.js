@@ -8,10 +8,9 @@
         from: 'Jen@example.com',
         text: 'Hey. This is khanh tin'
     });
-
-    socket.on('newMessage', function(newMessage) {
-        console.log("new message", newMessage); 
-    });
+    socket.on('newMessage', (newMessage) => {
+        console.log('New message from io: ', newMessage);
+    })
  });
 
 
