@@ -10,9 +10,17 @@
 
 <body>
     <h1>Hello world</h1>
+    <ol id="messages">
+        
+    </ol>
+    <form action="" id="message-form">
+        <input type="text" name="message" placeholder="Message" />
+        <button type="submit">Send</button>
+    </form>
 
     <!-- this one is from browser where we use on server.js socketIO(server) -->
     <script src="/socket.io/socket.io.js"></script>
+    <script src="./libs/jquery.js"></script>
     <script src="./js/index.js"></script>
 </body>
 
