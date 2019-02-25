@@ -29,14 +29,15 @@
     });
 
 
+    var messageTextBox = jQuery('[name=message]');
     jQuery('#message-form').on('submit', function(e) {
         e.preventDefault();  // block any event
         // add an event to this
         socket.emit('createMessage', {
             from: 'User',
-            text: jQuery('[name=message]').val(),
+            text: messageTextBox.val(),
         }, function() {
-    
+            messageTextBox.val('');
         });
      });
  });
@@ -46,12 +47,15 @@ locationButton.on('click', function() {
     if (!navigator.geolocation) {
         return alert('Geolocation is not supportted by your browser');
     }
+
+    locationButton.attr('disabled', 'disabled').text('Sending location ...');
     navigator.geolocation.getCurrentPosition(function(position) {
         console.log(position);
         socket.emit('createLocation', {
             latitude: position.coords.latitude,
             longtitude: position.coords.longitude
         });
+        locationButton.removeAttr('disabled').text('Send location');
     }, function() {
         return alert('Geolocation is not supportted by your browser');
     });

@@ -43,7 +43,7 @@ io.on('connection', (socket) => {
         //     newMessage.from,
         //     newMessage.text
         // ));
-        callback('This is from server');
+        callback();
     })
 
     socket.on('createLocation', (coords) => {
