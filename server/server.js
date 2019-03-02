@@ -11,7 +11,9 @@ const {
     generateLocationMessage
 } = require('./utils/message');
 const socketIO = require('socket.io');
-const {Users}  = require('./utils/user');
+const {
+    Users
+} = require('./utils/user');
 var server = http.createServer(app);
 var io = socketIO(server);
 let users = new Users();
@@ -53,12 +55,15 @@ io.on('connection', (socket) => {
     // listener from server when event occur from client
     socket.on('createMessage', (newMessage, callback) => {
         console.log('create message', newMessage);
+        var user = users.getUser(socket.id);
+        if (user && isRealString(newMessage.text)) {
+            // emit an event to every single connection
+            io.to(user.room).emit('newMessage', generateMessage(
+                user.name,
+                newMessage.text
+            ));
+        }
 
-        // emit an event to every single connection
-        io.emit('newMessage', generateMessage(
-            newMessage.from,
-            newMessage.text
-        ));
 
         // socket.broadcast.emit('newMessage', generateMessage(
         //     newMessage.from,
@@ -68,7 +73,10 @@ io.on('connection', (socket) => {
     })
 
     socket.on('createLocation', (coords) => {
-        io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longtitude));
+        var user = users.getUser(socket.id);
+        if (user) {
+            io.to(user.room).emit('newLocationMessage', generateLocationMessage(user.name, coords.latitude, coords.longtitude));
+        }
     })
 
     console.log('New user connected');
